@@ -6,7 +6,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-     "dev": "tsx watch src/server.ts",
+    "dev": "tsx watch src/server.ts",
     "start": "node dist/server.js",
     "check": "tsc --noEmit",
     "build": "tsc",
@@ -22,14 +22,13 @@
       "version": "11.22.0",
       "onFail": "download"
     }
-    
   },
-
   "devDependencies": {
     "@types/node": "^26.4.1",
     "tsx": "^4.23.13",
     "typescript": "^7.0.2"
+  },
+  "dependencies": {
+    "mongoose": "^8.24.4"
   }
- 
-  
 }
