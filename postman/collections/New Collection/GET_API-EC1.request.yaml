@@ -1,4 +1,12 @@
 $kind: http-request
-url: ""
+url: http://localhost:3000/api/tasks
 method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+        "title":"Aprender mas de BD"
+    }
 order: 4458373586496955
