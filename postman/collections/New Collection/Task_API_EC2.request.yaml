@@ -1,4 +1,7 @@
 $kind: http-request
 url: http://localhost:3000/api/tasks/
 method: GET
-order: 4479788673133472
+body:
+  type: json
+  content: "{\r\n    \"id\": 1\r\n    \r\n}"
+order: 3000
