@@ -20,7 +20,7 @@ const main = async (): Promise<void> => {
   await delay(300);
   console.log("\nTareas iniciales");
   showTasks();
-  const newTask =await createTask("Construir mi primer servicio");
+  const newTask = await createTask("Construir mi primer servicio");
   console.log(`Tarea creada con id ${newTask.id}.`);
   completeTask(newTask.id);
   console.log(`Tarea ${newTask.id} completada.`);

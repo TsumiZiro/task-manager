@@ -1,7 +1,10 @@
 $kind: http-request
-url: http://localhost:3000/api/tasks/
+url: http://localhost:3000/api/tasks?page=1&limit=2
 method: GET
+queryParams:
+  page: "1"
+  limit: "2"
 body:
   type: json
-  content: "{\r\n    \"id\": 1\r\n    \r\n}"
-order: 3000
+  content: "{\r\n  \r\n}"
+order: 4415
