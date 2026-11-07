@@ -1,5 +1,5 @@
 $kind: http-request
-url: http://localhost:3000/api/tasks
+url: http://localhost:3000/api/auth/login
 method: POST
 headers:
   Content-Type: application/json
@@ -7,6 +7,7 @@ body:
   type: json
   content: |-
     {
-        "title":"Aprender mas de BD"
+        "email" : "conocido@gmail.com",
+        "password":"123456789012345"
     }
 order: 1000
