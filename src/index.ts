@@ -6,7 +6,7 @@ import {
 import { delay } from "./utils/delay.js";
 import { getAppName } from "./utils/env.js";
 const showTasks = async (): Promise<void> => {
-  const rows = (await listTasks()).map((task) => ({
+  const rows = (await listTasks).map((task) => ({
     id: task.id,
     title: task.title,
     status: task.status,
