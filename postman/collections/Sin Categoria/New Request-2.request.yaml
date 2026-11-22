@@ -1,7 +1,0 @@
-$kind: http-request
-name: New Request
-url: http://localhost:3000/api/tasks?page=0
-method: GET
-queryParams:
-  page: "0"
-order: 7000

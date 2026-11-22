@@ -1,10 +1,6 @@
 $kind: http-request
-url: http://localhost:3000/api/tasks/:id/complete
-method: PATCH
-pathVariables:
-  - key: id
-    value: 6aebf735c6272507f6311052
-    description: ""
+url: http://localhost:3000/api/tasks/
+method: GET
 auth:
   type: bearer
   credentials:

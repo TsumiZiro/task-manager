@@ -1,9 +1,6 @@
 $kind: http-request
-url: http://localhost:3000/api/tasks?page=1&limit=5
+url: http://localhost:3000/api/tasks/
 method: GET
-queryParams:
-  page: "1"
-  limit: "5"
 body:
   type: json
   content: "{\r\n  \r\n}"
