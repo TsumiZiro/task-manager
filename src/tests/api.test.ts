@@ -76,17 +76,19 @@ beforeEach(async () => {
   });
   taskServiceDoubles.deleteTask.mockResolvedValue();
 });
-
 describe("documentación y controles HTTP", () => {
   it("publica OpenAPI, Swagger UI y encabezados de seguridad", async () => {
     const health = await request(app).get("/health").expect(200);
-    expect(health.body.data.status).toBe("up"); //Elimine la variable ".Data" para que funcione correctamente
+    expect(health.body.data.status).toBe("up");
+    expect(health.body.data.version).toBe("1.0.0-test");
+    expect(health.body.data.environment).toBe("test");
     expect(health.headers["x-powered-by"]).toBeUndefined();
-
     expect(health.headers["x-content-type-options"]).toBe("nosniff");
     expect(typeof health.headers["x-request-id"]).toBe("string");
     const specification = await request(app).get("/api-docs.json").expect(200);
     expect(specification.body.openapi).toBe("3.1.0");
+    expect(specification.body.info.version).toBe("1.0.0-test");
+    expect(specification.body.servers[0].url).toBe("http://localhost:3000");
     expect(specification.body.paths["/api/auth/me"]).toBeDefined();
     expect(
       specification.body.components.securitySchemes.bearerAuth.scheme,
@@ -97,7 +99,6 @@ describe("documentación y controles HTTP", () => {
     expect(swagger.text).toContain('id="swagger-ui"');
   });
 });
-
 describe("autenticación e identidad", () => {
   it("registra, autentica y consulta /me sin exponer el hash", async () => {
     const registration = await request(app)
@@ -126,7 +127,6 @@ describe("autenticación e identidad", () => {
       user.id,
     );
   });
-
   it("rechaza /me y las tareas cuando falta el token", async () => {
     const me = await request(app).get("/api/auth/me").expect(401);
     expect(me.body.error.code).toBe("AUTHENTICATION_REQUIRED");
@@ -134,7 +134,6 @@ describe("autenticación e identidad", () => {
     expect(taskList.body.error.code).toBe("AUTHENTICATION_REQUIRED");
   });
 });
-
 describe("CRUD protegido y autorización", () => {
   it("envía al servicio la consulta validada y crea una tarea", async () => {
     const list = await request(app)
@@ -160,7 +159,6 @@ describe("CRUD protegido y autorización", () => {
     expect(created.body.data.title).toBe(task.title);
     expect(taskServiceDoubles.createTask).toHaveBeenCalledWith(task.title);
   });
-
   it("mantiene 403 para user y 204 para admin al eliminar", async () => {
     const forbidden = await request(app)
       .delete(`/api/tasks/${task.id}`)
@@ -175,7 +173,6 @@ describe("CRUD protegido y autorización", () => {
     expect(taskServiceDoubles.deleteTask).toHaveBeenCalledWith(task.id);
   });
 });
-
 describe("regresión y respuestas negativas", () => {
   it("conserva validación, CORS y contrato uniforme de error", async () => {
     const invalid = await request(app)
@@ -201,5 +198,3 @@ describe("regresión y respuestas negativas", () => {
     ).toBeUndefined();
   });
 });
-
-/*Me quede hasta la pagina 26, (Paso 13)*/

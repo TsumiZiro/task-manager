@@ -7,9 +7,9 @@ body:
   type: json
   content: |-
     {
-        "name" : "Beta",
-        "email" : "beta@gmail.com",
-        "password":"1234567890"
+        "name" : "Desarrollo",
+        "email" : "desarollo@gmail.com",
+        "password":"123456789012345"
 
     }
 order: 2000
