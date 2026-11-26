@@ -1,0 +1,8 @@
+$kind: http-request
+url: http://localhost:3000/api/tasks/
+method: GET
+auth:
+  type: bearer
+  credentials:
+    token: ""
+order: 6000

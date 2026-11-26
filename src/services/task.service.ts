@@ -1,51 +1,80 @@
-import { tasks } from "../data/tasks.js";
-import type { Task } from "../models/task.js";
-export const listTasks = (): readonly Task[] => tasks;
-/*export const findTaskByStatus = (status: "pending" | "completed"): Task | undefined =>
-  tasks.find((task) => task.status === status); */
-export const findTaskById = (id: number): Task | undefined =>
-  tasks.find((task) => task.id === id);
-export const createTask = (title: string): Task => {
-  const cleanTitle = title.trim();
-  if (!cleanTitle) {
-    throw new Error("El título de la tarea es obligatorio.");
-  }
-  const nextId = Math.max(0, ...tasks.map((task) => task.id)) + 1;
-  const newTask: Task = {
-    id: nextId,
-    title: cleanTitle,
-    status: "pending",
-    createdAt: new Date(),
+import type { HydratedDocument } from "mongoose";
+import { AppError } from "../errors/app-error.js";
+import {
+  type Task,
+  type TaskPersistence,
+  type TaskUpdate,
+} from "../models/task.js";
+import {
+  createTaskDocument,
+  deleteTaskDocument,
+  findTaskDocumentById,
+  findTaskDocuments,
+  updateTaskDocument,
+} from "../repositories/task.repository.js";
+import type { TaskListQuery, TaskListResult } from "../types/task-query.js";
+const toTask = (document: HydratedDocument<TaskPersistence>): Task => ({
+  id: document._id.toString(),
+  title: document.title,
+  status: document.status,
+  createdAt: document.createdAt,
+  updatedAt: document.updatedAt,
+});
+export const listTasks = async (
+  query: TaskListQuery,
+): Promise<TaskListResult> => {
+  const { documents, total } = await findTaskDocuments(query);
+  const totalPages = Math.ceil(total / query.limit);
+  return {
+    data: documents.map(toTask),
+    meta: {
+      page: query.page,
+      limit: query.limit,
+      total,
+      totalPages,
+      hasNextPage: query.page < totalPages,
+      hasPreviousPage: query.page > 1 && totalPages > 0,
+    },
   };
-  tasks.push(newTask);
-  return newTask;
 };
-export const completeTask = (id: number): Task => {
-  const task = findTaskById(id);
-  if (!task) {
-    throw new Error(`No existe una tarea con el id ${id}.`);
+export const findTaskById = async (id: string): Promise<Task> => {
+  const document = await findTaskDocumentById(id);
+  if (!document) {
+    throw new AppError(
+      `No existe una tarea con el id ${id}.`,
+      404,
+      "TASK_NOT_FOUND",
+    );
   }
-  task.status = "completed";
-  return task;
-  
+  return toTask(document);
 };
-/*
-//Desafio Individual 1
-export const deleteTask = (id: number): void => {
-  const taskIndex = tasks.findIndex((task) => task.id === id);  
-  if (taskIndex === -1) {
-    throw new Error(`No existe una tarea con el id ${id}.`);
-  }
-  tasks.splice(taskIndex, 1);
+export const createTask = async (title: string): Promise<Task> => {
+  const document = await createTaskDocument(title);
+  return toTask(document);
 };
-//Desafio Individual 2
-export const PendingTask = (status: "pending"): Task => {
-  const task = findTaskByStatus(status);
-  if (!task) {
-    throw new Error(`No existe una tarea con el id ${status}.`);
+export const updateTask = async (
+  id: string,
+  changes: TaskUpdate,
+): Promise<Task> => {
+  const document = await updateTaskDocument(id, changes);
+  if (!document) {
+    throw new AppError(
+      `No existe una tarea con el id ${id}.`,
+      404,
+      "TASK_NOT_FOUND",
+    );
   }
-  task.status = "pending";
-  return task;
- 
-}
- */
+  return toTask(document);
+};
+export const completeTask = async (id: string): Promise<Task> =>
+  updateTask(id, { status: "completed" });
+export const deleteTask = async (id: string): Promise<void> => {
+  const document = await deleteTaskDocument(id);
+  if (!document) {
+    throw new AppError(
+      `No existe una tarea con el id ${id}.`,
+      404,
+      "TASK_NOT_FOUND",
+    );
+  }
+};

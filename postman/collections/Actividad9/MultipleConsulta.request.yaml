@@ -1,0 +1,21 @@
+$kind: http-request
+url: http://localhost:3000/api/tasks?status=completed&search=Revisar&sortBy=title&order=asc
+method: GET
+queryParams:
+  - key: status
+    value: completed
+    disabled: false
+    description: ""
+  - key: search
+    value: Revisar
+    disabled: false
+    description: ""
+  - key: sortBy
+    value: title
+    disabled: false
+    description: ""
+  - key: order
+    value: asc
+    disabled: false
+    description: ""
+order: 5000

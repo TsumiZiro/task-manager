@@ -1,0 +1,8 @@
+$kind: http-request
+name: Task_API_EC2
+url: http://localhost:3000/api/tasks/6acfbc5bfc5eb807a72d1bd7
+method: PATCH
+body:
+  type: json
+  content: "{\r\n\"status\": \"archived\"  \r\n}"
+order: 3000

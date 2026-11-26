@@ -1,0 +1,7 @@
+$kind: http-request
+url: http://localhost:3000/api/tasks/
+method: GET
+body:
+  type: json
+  content: "{\r\n  \r\n}"
+order: 4000
