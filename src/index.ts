@@ -1,3 +1,4 @@
+/*
 import {
   createTask,
   completeTask,
@@ -6,7 +7,7 @@ import {
 import { delay } from "./utils/delay.js";
 import { getAppName } from "./utils/env.js";
 const showTasks = async (): Promise<void> => {
-  const rows = (await listTasks).map((task) => ({
+  const rows = (await listTasks()).map((task) => ({
     id: task.id,
     title: task.title,
     status: task.status,
@@ -38,3 +39,5 @@ main().catch((error: unknown) => {
   console.error("Error no controlado:", error);
   process.exitCode = 1;
 });
+
+*/

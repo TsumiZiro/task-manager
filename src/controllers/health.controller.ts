@@ -5,8 +5,8 @@ export const getHealth = (_req: Request, res: Response): void => {
   res.status(200).json({
     data: {
       status: "up",
-      version: env.APP_VERSION,
-      environment: env.NODE_ENV,
+      version: process.env.APP_VERSION ?? "unknown",
+      environment: process.env.NODE_ENV ?? "unknown",
     },
   });
 };

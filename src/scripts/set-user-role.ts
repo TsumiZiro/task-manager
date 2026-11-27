@@ -1,17 +1,24 @@
 import { connectDatabase, disconnectDatabase } from "../config/database.js";
 import { isUserRole } from "../models/user.js";
 import { setUserRoleByEmail } from "../repositories/user.repository.js";
+import { env } from "../config/env.js";
+
 const run = async (): Promise<void> => {
   const email = process.argv[2]?.trim().toLowerCase();
   const role = process.argv[3]?.trim();
   if (!email || !role || !isUserRole(role)) {
     throw new Error("Uso: pnpm role:set <correo> <user|admin>");
   }
-  await connectDatabase();
+
+  await connectDatabase({
+    uri: env.MONGODB_URI,
+    dbName: env.MONGODB_DB_NAME || "task-api",
+  });
   const user = await setUserRoleByEmail(email, role);
   if (!user) throw new Error(`No existe un usuario con el correo ${email}.`);
   console.log(`Rol actualizado: ${user.email} ahora es ${user.role}.`);
 };
+
 try {
   await run();
 } catch (error: unknown) {

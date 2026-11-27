@@ -1,4 +1,5 @@
 import "dotenv/config";
+
 const requireValue = (name: string): string => {
   const value = process.env[name]?.trim();
   if (!value) throw new Error(`Falta la variable de entorno ${name}.`);
@@ -62,12 +63,10 @@ const parseHttpUrl = (name: string): string => {
   return value;
 };
 export const env = Object.freeze({
-  NODE_ENV: parseEnvironment(),
-  APP_VERSION: process.env.APP_VERSION?.trim() || "1.0.0",
   PORT: parsePort(process.env.PORT),
+  MONGODB_URI: requireValue("MONGODB_URI"),
   PUBLIC_API_URL: parseHttpUrl("PUBLIC_API_URL"),
   TRUST_PROXY_HOPS: parseNonNegativeInteger("TRUST_PROXY_HOPS", "0"),
-  MONGODB_URI: requireValue("MONGODB_URI"),
   MONGODB_DB_NAME: requireValue("MONGODB_DB_NAME"),
   JWT_SECRET: parseJwtSecret(),
   JWT_EXPIRES_IN: parseExpiration(),

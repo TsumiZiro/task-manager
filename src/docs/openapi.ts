@@ -3,7 +3,7 @@ export const openApiDocument: Record<string, unknown> = {
   openapi: "3.1.0",
   info: {
     title: "Task API Express",
-    version: env.APP_VERSION,
+    version: process.env.APP_VERSION,
     description:
       "API REST para gestionar tareas con autenticación JWT y autorización por roles.",
   },
@@ -11,7 +11,7 @@ export const openApiDocument: Record<string, unknown> = {
     {
       url: env.PUBLIC_API_URL,
       description:
-        env.NODE_ENV === "production"
+        process.env.NODE_ENV === "production"
           ? "Entorno de producción"
           : "Entorno local",
     },

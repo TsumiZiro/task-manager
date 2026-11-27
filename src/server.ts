@@ -1,3 +1,4 @@
+import "dotenv/config";
 import type { Server } from "node:http";
 import { app } from "./app.js";
 import { connectDatabase, disconnectDatabase } from "./config/database.js";
@@ -5,9 +6,12 @@ import { env } from "./config/env.js";
 let server: Server | undefined;
 const start = async (): Promise<void> => {
   try {
-    await connectDatabase();
+    await connectDatabase({
+      uri: env.MONGODB_URI,
+      dbName: env.MONGODB_DB_NAME || "task-api",
+    });
     server = app.listen(env.PORT, "0.0.0.0", () => {
-      console.log(`API ${env.APP_VERSION} disponible en ${env.PUBLIC_API_URL}`);
+      console.log(`API ${env.MONGODB_DB_NAME} disponible en ${env.PUBLIC_API_URL}`);
     });
   } catch {
     console.error(
